@@ -6,7 +6,7 @@
 
 <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
 
-<meta name="author" content="Harlow Malloc">
+<meta name="author" content="Esteban Navarro">
 <meta name="dcterms.date" content="2024-11-19">
 
 <title>Post With Code – repo proyecto final</title>
@@ -22,10 +22,44 @@ ul.task-list li input[type="checkbox"] {
   margin: 0 0.8em 0.2em -1em; /* quarto-specific, see https://github.com/quarto-dev/quarto-cli/issues/4556 */ 
   vertical-align: middle;
 }
+/* CSS for syntax highlighting */
+pre > code.sourceCode { white-space: pre; position: relative; }
+pre > code.sourceCode > span { line-height: 1.25; }
+pre > code.sourceCode > span:empty { height: 1.2em; }
+.sourceCode { overflow: visible; }
+code.sourceCode > span { color: inherit; text-decoration: inherit; }
+div.sourceCode { margin: 1em 0; }
+pre.sourceCode { margin: 0; }
+@media screen {
+div.sourceCode { overflow: auto; }
+}
+@media print {
+pre > code.sourceCode { white-space: pre-wrap; }
+pre > code.sourceCode > span { display: inline-block; text-indent: -5em; padding-left: 5em; }
+}
+pre.numberSource code
+  { counter-reset: source-line 0; }
+pre.numberSource code > span
+  { position: relative; left: -4em; counter-increment: source-line; }
+pre.numberSource code > span > a:first-child::before
+  { content: counter(source-line);
+    position: relative; left: -1em; text-align: right; vertical-align: baseline;
+    border: none; display: inline-block;
+    -webkit-touch-callout: none; -webkit-user-select: none;
+    -khtml-user-select: none; -moz-user-select: none;
+    -ms-user-select: none; user-select: none;
+    padding: 0 4px; width: 4em;
+  }
+pre.numberSource { margin-left: 3em;  padding-left: 4px; }
+div.sourceCode
+  {   }
+@media screen {
+pre > code.sourceCode > span > a:first-child::before { text-decoration: underline; }
+}
 </style>
 
 
-<script src="../../site_libs/quarto-nav/quarto-nav.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.5.1/jquery.min.js" integrity="sha512-bLT0Qm9VnAYZDflyKcBaQ2gg0hSYNQrJ8RilYldYQ1FxQYoCLtUjuuRuZo+fjqhx/qtq/1itJ0C2ejDxltZVFg==" crossorigin="anonymous"></script><script src="../../site_libs/quarto-nav/quarto-nav.js"></script>
 <script src="../../site_libs/quarto-nav/headroom.min.js"></script>
 <script src="../../site_libs/clipboard/clipboard.min.js"></script>
 <script src="../../site_libs/quarto-search/autocomplete.umd.js"></script>
@@ -68,6 +102,44 @@ ul.task-list li input[type="checkbox"] {
     "search-label": "Search"
   }
 }</script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/require.js/2.3.6/require.min.js" integrity="sha512-c3Nl8+7g4LMSTdrm621y7kf9v3SDPnhxLNhcjFJbKECVnmZHTdo+IRO05sNLTH/D3vA6u1X32ehoLC7WFVdheg==" crossorigin="anonymous"></script>
+
+
+
+<script type="application/javascript">define('jquery', [],function() {return window.jQuery;})</script>
+
+<script type="text/javascript">
+
+window.PlotlyConfig = {MathJaxConfig: 'local'};
+
+if (window.MathJax && window.MathJax.Hub && window.MathJax.Hub.Config) {window.MathJax.Hub.Config({SVG: {font: "STIX-Web"}});}
+
+if (typeof require !== 'undefined') {
+
+require.undef("plotly");
+
+requirejs.config({
+
+    paths: {
+
+        'plotly': ['https://cdn.plot.ly/plotly-2.35.0.min']
+
+    }
+
+});
+
+require(['plotly'], function(Plotly) {
+
+    window._Plotly = Plotly;
+
+});
+
+}
+
+</script>
+
+
+
 
 
 <link rel="stylesheet" href="../../styles.css">
@@ -130,7 +202,7 @@ ul.task-list li input[type="checkbox"] {
       <div>
       <div class="quarto-title-meta-heading">Author</div>
       <div class="quarto-title-meta-contents">
-               <p>Harlow Malloc </p>
+               <p>Esteban Navarro </p>
             </div>
     </div>
       
@@ -156,7 +228,345 @@ ul.task-list li input[type="checkbox"] {
 
 
 
+<div id="0b6eda9f" class="cell" data-execution_count="1">
+<div class="sourceCode cell-code" id="cb1"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="co">#importamos librerias</span></span>
+<span id="cb1-2"><a href="#cb1-2" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> sqlite3</span>
+<span id="cb1-3"><a href="#cb1-3" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> pandas <span class="im">as</span> pd</span>
+<span id="cb1-4"><a href="#cb1-4" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> plotly.express <span class="im">as</span> px</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
 <p>This is a post with executable code.</p>
+<div id="6659dc6d" class="cell" data-execution_count="2">
+<div class="sourceCode cell-code" id="cb2"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a><span class="co">#conectamos con la base datos</span></span>
+<span id="cb2-2"><a href="#cb2-2" aria-hidden="true" tabindex="-1"></a>conn <span class="op">=</span> sqlite3.<span class="ex">connect</span>(<span class="vs">r"C:\Users\f\Downloads\cetav\progra 3 naib\sem 3\Northwind_small.sqlite"</span>)</span>
+<span id="cb2-3"><a href="#cb2-3" aria-hidden="true" tabindex="-1"></a>conn.close</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-display" data-execution_count="2">
+<pre><code>&lt;function Connection.close()&gt;</code></pre>
+</div>
+</div>
+<div id="85e83d18" class="cell" data-execution_count="3">
+<div class="sourceCode cell-code" id="cb4"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb4-1"><a href="#cb4-1" aria-hidden="true" tabindex="-1"></a>pedidos <span class="op">=</span> pd.read_sql_query(<span class="st">"SELECT * FROM 'Order'"</span>, conn)</span>
+<span id="cb4-2"><a href="#cb4-2" aria-hidden="true" tabindex="-1"></a>detalles_pedidos <span class="op">=</span> pd.read_sql_query(<span class="st">"SELECT * FROM OrderDetail"</span>, conn)</span>
+<span id="cb4-3"><a href="#cb4-3" aria-hidden="true" tabindex="-1"></a>empleados <span class="op">=</span> pd.read_sql_query(<span class="st">"SELECT * FROM 'employee'"</span>, conn)</span>
+<span id="cb4-4"><a href="#cb4-4" aria-hidden="true" tabindex="-1"></a><span class="dv">1</span></span>
+<span id="cb4-5"><a href="#cb4-5" aria-hidden="true" tabindex="-1"></a>clientes <span class="op">=</span> pd.read_sql_query(<span class="st">"SELECT * FROM 'customer'"</span>, conn)</span>
+<span id="cb4-6"><a href="#cb4-6" aria-hidden="true" tabindex="-1"></a><span class="co">#para este dataframe no me interesa su numero asi que solo agrego nombre y id</span></span>
+<span id="cb4-7"><a href="#cb4-7" aria-hidden="true" tabindex="-1"></a>shipper <span class="op">=</span> pd.read_sql_query(<span class="st">"SELECT Id, CompanyName FROM Shipper"</span>, conn)</span>
+<span id="cb4-8"><a href="#cb4-8" aria-hidden="true" tabindex="-1"></a>producto <span class="op">=</span> pd.read_sql_query(<span class="st">"SELECT Id, ProductName, categoryId, UnitPrice FROM Product"</span>, conn)</span>
+<span id="cb4-9"><a href="#cb4-9" aria-hidden="true" tabindex="-1"></a>categoria <span class="op">=</span> pd.read_sql_query(<span class="st">"SELECT Id, CategoryName FROM category"</span>, conn)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<div id="b8c1f4a2" class="cell" data-execution_count="4">
+<div class="sourceCode cell-code" id="cb5"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb5-1"><a href="#cb5-1" aria-hidden="true" tabindex="-1"></a> <span class="co">#empiezo a unir los dataframes que necesito, metodo usado es df1.merge(df2, left_on='col1', right_on='col2')</span></span>
+<span id="cb5-2"><a href="#cb5-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb5-3"><a href="#cb5-3" aria-hidden="true" tabindex="-1"></a>tabla_unificada1 <span class="op">=</span> pedidos.merge(detalles_pedidos, left_on<span class="op">=</span><span class="st">'Id'</span>, right_on<span class="op">=</span><span class="st">'OrderId'</span>, suffixes<span class="op">=</span>(<span class="st">'_pedido'</span>, <span class="st">'Detalle'</span>))</span>
+<span id="cb5-4"><a href="#cb5-4" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb5-5"><a href="#cb5-5" aria-hidden="true" tabindex="-1"></a>tabla_unificada2 <span class="op">=</span> tabla_unificada1.merge(empleados, left_on<span class="op">=</span><span class="st">'EmployeeId'</span>, right_on<span class="op">=</span><span class="st">'Id'</span>, suffixes<span class="op">=</span>(<span class="st">''</span>, <span class="st">'Empleado'</span>))</span>
+<span id="cb5-6"><a href="#cb5-6" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb5-7"><a href="#cb5-7" aria-hidden="true" tabindex="-1"></a>tabla_unificada3 <span class="op">=</span> tabla_unificada2.merge(producto, left_on<span class="op">=</span><span class="st">'ProductId'</span>, right_on<span class="op">=</span><span class="st">'Id'</span>, suffixes<span class="op">=</span>(<span class="st">''</span>, <span class="st">'Producto'</span>))</span>
+<span id="cb5-8"><a href="#cb5-8" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb5-9"><a href="#cb5-9" aria-hidden="true" tabindex="-1"></a>tabla_unificada4 <span class="op">=</span> tabla_unificada3.merge(categoria, left_on<span class="op">=</span><span class="st">'CategoryId'</span>, right_on<span class="op">=</span><span class="st">'Id'</span>, suffixes<span class="op">=</span>(<span class="st">''</span>, <span class="st">'Categoria'</span>))</span>
+<span id="cb5-10"><a href="#cb5-10" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb5-11"><a href="#cb5-11" aria-hidden="true" tabindex="-1"></a>tabla_unificada5 <span class="op">=</span> tabla_unificada4.merge(clientes, left_on<span class="op">=</span><span class="st">'CustomerId'</span>, right_on<span class="op">=</span><span class="st">'Id'</span>, suffixes<span class="op">=</span>(<span class="st">''</span>, <span class="st">'Cliente'</span>))</span>
+<span id="cb5-12"><a href="#cb5-12" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb5-13"><a href="#cb5-13" aria-hidden="true" tabindex="-1"></a>Northwind_unificada <span class="op">=</span> tabla_unificada5.merge(shipper, left_on<span class="op">=</span><span class="st">'ShipVia'</span>, right_on<span class="op">=</span><span class="st">'Id'</span>, suffixes<span class="op">=</span>(<span class="st">''</span>, <span class="st">'Shipper'</span>))</span>
+<span id="cb5-14"><a href="#cb5-14" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb5-15"><a href="#cb5-15" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb5-16"><a href="#cb5-16" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb5-17"><a href="#cb5-17" aria-hidden="true" tabindex="-1"></a>Northwind_unificada.head(<span class="dv">5</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-display" data-execution_count="4">
+<div>
+
+
+<table class="dataframe caption-top table table-sm table-striped small" data-quarto-postprocess="true" data-border="1">
+<thead>
+<tr class="header">
+<th data-quarto-table-cell-role="th"></th>
+<th data-quarto-table-cell-role="th">Id_pedido</th>
+<th data-quarto-table-cell-role="th">CustomerId</th>
+<th data-quarto-table-cell-role="th">EmployeeId</th>
+<th data-quarto-table-cell-role="th">OrderDate</th>
+<th data-quarto-table-cell-role="th">RequiredDate</th>
+<th data-quarto-table-cell-role="th">ShippedDate</th>
+<th data-quarto-table-cell-role="th">ShipVia</th>
+<th data-quarto-table-cell-role="th">Freight</th>
+<th data-quarto-table-cell-role="th">ShipName</th>
+<th data-quarto-table-cell-role="th">ShipAddress</th>
+<th data-quarto-table-cell-role="th">...</th>
+<th data-quarto-table-cell-role="th">ContactTitle</th>
+<th data-quarto-table-cell-role="th">AddressCliente</th>
+<th data-quarto-table-cell-role="th">CityCliente</th>
+<th data-quarto-table-cell-role="th">RegionCliente</th>
+<th data-quarto-table-cell-role="th">PostalCodeCliente</th>
+<th data-quarto-table-cell-role="th">CountryCliente</th>
+<th data-quarto-table-cell-role="th">Phone</th>
+<th data-quarto-table-cell-role="th">Fax</th>
+<th data-quarto-table-cell-role="th">IdShipper</th>
+<th data-quarto-table-cell-role="th">CompanyNameShipper</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td data-quarto-table-cell-role="th">0</td>
+<td>10248</td>
+<td>VINET</td>
+<td>5</td>
+<td>2012-07-04</td>
+<td>2012-08-01</td>
+<td>2012-07-16</td>
+<td>3</td>
+<td>32.38</td>
+<td>Vins et alcools Chevalier</td>
+<td>59 rue de l'Abbaye</td>
+<td>...</td>
+<td>Accounting Manager</td>
+<td>59 rue de l'Abbaye</td>
+<td>Reims</td>
+<td>Western Europe</td>
+<td>51100</td>
+<td>France</td>
+<td>26.47.15.10</td>
+<td>26.47.15.11</td>
+<td>3</td>
+<td>Federal Shipping</td>
+</tr>
+<tr class="even">
+<td data-quarto-table-cell-role="th">1</td>
+<td>10248</td>
+<td>VINET</td>
+<td>5</td>
+<td>2012-07-04</td>
+<td>2012-08-01</td>
+<td>2012-07-16</td>
+<td>3</td>
+<td>32.38</td>
+<td>Vins et alcools Chevalier</td>
+<td>59 rue de l'Abbaye</td>
+<td>...</td>
+<td>Accounting Manager</td>
+<td>59 rue de l'Abbaye</td>
+<td>Reims</td>
+<td>Western Europe</td>
+<td>51100</td>
+<td>France</td>
+<td>26.47.15.10</td>
+<td>26.47.15.11</td>
+<td>3</td>
+<td>Federal Shipping</td>
+</tr>
+<tr class="odd">
+<td data-quarto-table-cell-role="th">2</td>
+<td>10248</td>
+<td>VINET</td>
+<td>5</td>
+<td>2012-07-04</td>
+<td>2012-08-01</td>
+<td>2012-07-16</td>
+<td>3</td>
+<td>32.38</td>
+<td>Vins et alcools Chevalier</td>
+<td>59 rue de l'Abbaye</td>
+<td>...</td>
+<td>Accounting Manager</td>
+<td>59 rue de l'Abbaye</td>
+<td>Reims</td>
+<td>Western Europe</td>
+<td>51100</td>
+<td>France</td>
+<td>26.47.15.10</td>
+<td>26.47.15.11</td>
+<td>3</td>
+<td>Federal Shipping</td>
+</tr>
+<tr class="even">
+<td data-quarto-table-cell-role="th">3</td>
+<td>10249</td>
+<td>TOMSP</td>
+<td>6</td>
+<td>2012-07-05</td>
+<td>2012-08-16</td>
+<td>2012-07-10</td>
+<td>1</td>
+<td>11.61</td>
+<td>Toms Spezialitäten</td>
+<td>Luisenstr. 48</td>
+<td>...</td>
+<td>Marketing Manager</td>
+<td>Luisenstr. 48</td>
+<td>Münster</td>
+<td>Western Europe</td>
+<td>44087</td>
+<td>Germany</td>
+<td>0251-031259</td>
+<td>0251-035695</td>
+<td>1</td>
+<td>Speedy Express</td>
+</tr>
+<tr class="odd">
+<td data-quarto-table-cell-role="th">4</td>
+<td>10249</td>
+<td>TOMSP</td>
+<td>6</td>
+<td>2012-07-05</td>
+<td>2012-08-16</td>
+<td>2012-07-10</td>
+<td>1</td>
+<td>11.61</td>
+<td>Toms Spezialitäten</td>
+<td>Luisenstr. 48</td>
+<td>...</td>
+<td>Marketing Manager</td>
+<td>Luisenstr. 48</td>
+<td>Münster</td>
+<td>Western Europe</td>
+<td>44087</td>
+<td>Germany</td>
+<td>0251-031259</td>
+<td>0251-035695</td>
+<td>1</td>
+<td>Speedy Express</td>
+</tr>
+</tbody>
+</table>
+
+<p>5 rows × 57 columns</p>
+</div>
+</div>
+</div>
+<div id="c3bcea11" class="cell" data-execution_count="5">
+<div class="sourceCode cell-code" id="cb6"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb6-1"><a href="#cb6-1" aria-hidden="true" tabindex="-1"></a> <span class="co">#Creo dataframes con las columnas especificas que necesito para el posterior graficado de los datos</span></span>
+<span id="cb6-2"><a href="#cb6-2" aria-hidden="true" tabindex="-1"></a>tabla_ventas <span class="op">=</span> Northwind_unificada[[<span class="st">'Id_pedido'</span>, <span class="st">'UnitPrice'</span>, <span class="st">'ProductName'</span>, <span class="st">'CategoryName'</span>, <span class="st">'Quantity'</span>]].copy()</span>
+<span id="cb6-3"><a href="#cb6-3" aria-hidden="true" tabindex="-1"></a>tabla_ventas.loc[:, <span class="st">'Total'</span>] <span class="op">=</span> tabla_ventas[<span class="st">'UnitPrice'</span>] <span class="op">*</span> tabla_ventas[<span class="st">'Quantity'</span>]</span>
+<span id="cb6-4"><a href="#cb6-4" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb6-5"><a href="#cb6-5" aria-hidden="true" tabindex="-1"></a><span class="co"># Mostrar las primeras filas para verificar</span></span>
+<span id="cb6-6"><a href="#cb6-6" aria-hidden="true" tabindex="-1"></a>tabla_ventas.head(<span class="dv">5</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-display" data-execution_count="5">
+<div>
+
+
+<table class="dataframe caption-top table table-sm table-striped small" data-quarto-postprocess="true" data-border="1">
+<thead>
+<tr class="header">
+<th data-quarto-table-cell-role="th"></th>
+<th data-quarto-table-cell-role="th">Id_pedido</th>
+<th data-quarto-table-cell-role="th">UnitPrice</th>
+<th data-quarto-table-cell-role="th">ProductName</th>
+<th data-quarto-table-cell-role="th">CategoryName</th>
+<th data-quarto-table-cell-role="th">Quantity</th>
+<th data-quarto-table-cell-role="th">Total</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td data-quarto-table-cell-role="th">0</td>
+<td>10248</td>
+<td>14.0</td>
+<td>Queso Cabrales</td>
+<td>Dairy Products</td>
+<td>12</td>
+<td>168.0</td>
+</tr>
+<tr class="even">
+<td data-quarto-table-cell-role="th">1</td>
+<td>10248</td>
+<td>9.8</td>
+<td>Singaporean Hokkien Fried Mee</td>
+<td>Grains/Cereals</td>
+<td>10</td>
+<td>98.0</td>
+</tr>
+<tr class="odd">
+<td data-quarto-table-cell-role="th">2</td>
+<td>10248</td>
+<td>34.8</td>
+<td>Mozzarella di Giovanni</td>
+<td>Dairy Products</td>
+<td>5</td>
+<td>174.0</td>
+</tr>
+<tr class="even">
+<td data-quarto-table-cell-role="th">3</td>
+<td>10249</td>
+<td>18.6</td>
+<td>Tofu</td>
+<td>Produce</td>
+<td>9</td>
+<td>167.4</td>
+</tr>
+<tr class="odd">
+<td data-quarto-table-cell-role="th">4</td>
+<td>10249</td>
+<td>42.4</td>
+<td>Manjimup Dried Apples</td>
+<td>Produce</td>
+<td>40</td>
+<td>1696.0</td>
+</tr>
+</tbody>
+</table>
+
+</div>
+</div>
+</div>
+<div id="754a568e" class="cell" data-execution_count="6">
+<div class="sourceCode cell-code" id="cb7"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb7-1"><a href="#cb7-1" aria-hidden="true" tabindex="-1"></a> <span class="co"># importo librerias</span></span>
+<span id="cb7-2"><a href="#cb7-2" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> plotly.express <span class="im">as</span> px</span>
+<span id="cb7-3"><a href="#cb7-3" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> plotly.io <span class="im">as</span> pio</span>
+<span id="cb7-4"><a href="#cb7-4" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb7-5"><a href="#cb7-5" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb7-6"><a href="#cb7-6" aria-hidden="true" tabindex="-1"></a> <span class="co">#saco las columnas que necesito y las copio para evitar danar el dataframe que hice</span></span>
+<span id="cb7-7"><a href="#cb7-7" aria-hidden="true" tabindex="-1"></a>tabla_ventas[[<span class="st">'ProductName'</span>, <span class="st">'Total'</span>]].copy()</span>
+<span id="cb7-8"><a href="#cb7-8" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb7-9"><a href="#cb7-9" aria-hidden="true" tabindex="-1"></a><span class="co">#agrupo por 'ProductName' y sumar el total de ventas, seleccionando el top 10</span></span>
+<span id="cb7-10"><a href="#cb7-10" aria-hidden="true" tabindex="-1"></a>top_10_productos <span class="op">=</span> tabla_ventas.groupby(<span class="st">'ProductName'</span>)[<span class="st">'Total'</span>].<span class="bu">sum</span>().nlargest(<span class="dv">10</span>).reset_index()</span>
+<span id="cb7-11"><a href="#cb7-11" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb7-12"><a href="#cb7-12" aria-hidden="true" tabindex="-1"></a><span class="co"># creo el grafico basico ocon las dos columnas</span></span>
+<span id="cb7-13"><a href="#cb7-13" aria-hidden="true" tabindex="-1"></a>fig <span class="op">=</span> px.bar(top_10_productos, x<span class="op">=</span><span class="st">'ProductName'</span>, y<span class="op">=</span><span class="st">'Total'</span>,</span>
+<span id="cb7-14"><a href="#cb7-14" aria-hidden="true" tabindex="-1"></a>             hover_data<span class="op">=</span>[<span class="st">'Total'</span>], labels<span class="op">=</span>{<span class="st">'Total'</span>: <span class="st">''</span>}, height<span class="op">=</span><span class="dv">500</span>,</span>
+<span id="cb7-15"><a href="#cb7-15" aria-hidden="true" tabindex="-1"></a>             title<span class="op">=</span><span class="st">"Top 10 Ventas Totales por Producto"</span>)</span>
+<span id="cb7-16"><a href="#cb7-16" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb7-17"><a href="#cb7-17" aria-hidden="true" tabindex="-1"></a><span class="co"># Aagrego las etiquetas de datos</span></span>
+<span id="cb7-18"><a href="#cb7-18" aria-hidden="true" tabindex="-1"></a>fig.update_traces(texttemplate<span class="op">=</span><span class="st">'%</span><span class="sc">{y:.2f}</span><span class="st">'</span>, textposition<span class="op">=</span><span class="st">'outside'</span>)</span>
+<span id="cb7-19"><a href="#cb7-19" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb7-20"><a href="#cb7-20" aria-hidden="true" tabindex="-1"></a><span class="co"># elijo azul para las 3 primeras columnas y gris para el resto para mostrar</span></span>
+<span id="cb7-21"><a href="#cb7-21" aria-hidden="true" tabindex="-1"></a>colors <span class="op">=</span> [<span class="st">'#ADD8E6'</span> <span class="cf">if</span> i <span class="op">&lt;</span> <span class="dv">3</span> <span class="cf">else</span> <span class="st">'#D3D3D3'</span> <span class="cf">for</span> i <span class="kw">in</span> <span class="bu">range</span>(<span class="bu">len</span>(top_10_productos))]</span>
+<span id="cb7-22"><a href="#cb7-22" aria-hidden="true" tabindex="-1"></a>fig.update_traces(marker<span class="op">=</span><span class="bu">dict</span>(color<span class="op">=</span>colors))</span>
+<span id="cb7-23"><a href="#cb7-23" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb7-24"><a href="#cb7-24" aria-hidden="true" tabindex="-1"></a><span class="co"># elimino la barra de datos del eje y</span></span>
+<span id="cb7-25"><a href="#cb7-25" aria-hidden="true" tabindex="-1"></a>fig.update_layout(yaxis<span class="op">=</span><span class="bu">dict</span>(showticklabels<span class="op">=</span><span class="va">False</span>))</span>
+<span id="cb7-26"><a href="#cb7-26" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb7-27"><a href="#cb7-27" aria-hidden="true" tabindex="-1"></a><span class="co"># centro el titulo, tambien quito la leyenda de los productos</span></span>
+<span id="cb7-28"><a href="#cb7-28" aria-hidden="true" tabindex="-1"></a>fig.update_layout(title<span class="op">=</span>{<span class="st">'text'</span>: <span class="st">"Top 10 Ventas Totales por Producto"</span>, <span class="st">'x'</span>:<span class="fl">0.5</span>, <span class="st">'xanchor'</span>: <span class="st">'center'</span>},</span>
+<span id="cb7-29"><a href="#cb7-29" aria-hidden="true" tabindex="-1"></a>                  showlegend<span class="op">=</span><span class="va">False</span>)</span>
+<span id="cb7-30"><a href="#cb7-30" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb7-31"><a href="#cb7-31" aria-hidden="true" tabindex="-1"></a><span class="co"># Mostrar el gráfico</span></span>
+<span id="cb7-32"><a href="#cb7-32" aria-hidden="true" tabindex="-1"></a>fig.show()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-display">
+<div>                            <div id="9561d342-5eb6-4d46-80a4-a20386ce8bcf" class="plotly-graph-div" style="height:500px; width:100%;"></div>            <script type="text/javascript">                require(["plotly"], function(Plotly) {                    window.PLOTLYENV=window.PLOTLYENV || {};                                    if (document.getElementById("9561d342-5eb6-4d46-80a4-a20386ce8bcf")) {                    Plotly.newPlot(                        "9561d342-5eb6-4d46-80a4-a20386ce8bcf",                        [{"alignmentgroup":"True","hovertemplate":"ProductName=%{x}\u003cbr\u003e=%{y}\u003cextra\u003e\u003c\u002fextra\u003e","legendgroup":"","marker":{"color":["#ADD8E6","#ADD8E6","#ADD8E6","#D3D3D3","#D3D3D3","#D3D3D3","#D3D3D3","#D3D3D3","#D3D3D3","#D3D3D3"],"pattern":{"shape":""}},"name":"","offsetgroup":"","orientation":"v","showlegend":false,"textposition":"outside","x":["C\u00f4te de Blaye","Th\u00fcringer Rostbratwurst","Raclette Courdavault","Tarte au sucre","Camembert Pierrot","Manjimup Dried Apples","Gnocchi di nonna Alice","Alice Mutton","Carnarvon Tigers","R\u00f6ssle Sauerkraut"],"xaxis":"x","y":[141552.2,87736.40000000001,75361.0,49827.9,47872.0,44742.6,42841.2,34195.2,31987.5,24972.0],"yaxis":"y","type":"bar","texttemplate":"%{y:.2f}"}],                        {"template":{"data":{"histogram2dcontour":[{"type":"histogram2dcontour","colorbar":{"outlinewidth":0,"ticks":""},"colorscale":[[0.0,"#0d0887"],[0.1111111111111111,"#46039f"],[0.2222222222222222,"#7201a8"],[0.3333333333333333,"#9c179e"],[0.4444444444444444,"#bd3786"],[0.5555555555555556,"#d8576b"],[0.6666666666666666,"#ed7953"],[0.7777777777777778,"#fb9f3a"],[0.8888888888888888,"#fdca26"],[1.0,"#f0f921"]]}],"choropleth":[{"type":"choropleth","colorbar":{"outlinewidth":0,"ticks":""}}],"histogram2d":[{"type":"histogram2d","colorbar":{"outlinewidth":0,"ticks":""},"colorscale":[[0.0,"#0d0887"],[0.1111111111111111,"#46039f"],[0.2222222222222222,"#7201a8"],[0.3333333333333333,"#9c179e"],[0.4444444444444444,"#bd3786"],[0.5555555555555556,"#d8576b"],[0.6666666666666666,"#ed7953"],[0.7777777777777778,"#fb9f3a"],[0.8888888888888888,"#fdca26"],[1.0,"#f0f921"]]}],"heatmap":[{"type":"heatmap","colorbar":{"outlinewidth":0,"ticks":""},"colorscale":[[0.0,"#0d0887"],[0.1111111111111111,"#46039f"],[0.2222222222222222,"#7201a8"],[0.3333333333333333,"#9c179e"],[0.4444444444444444,"#bd3786"],[0.5555555555555556,"#d8576b"],[0.6666666666666666,"#ed7953"],[0.7777777777777778,"#fb9f3a"],[0.8888888888888888,"#fdca26"],[1.0,"#f0f921"]]}],"heatmapgl":[{"type":"heatmapgl","colorbar":{"outlinewidth":0,"ticks":""},"colorscale":[[0.0,"#0d0887"],[0.1111111111111111,"#46039f"],[0.2222222222222222,"#7201a8"],[0.3333333333333333,"#9c179e"],[0.4444444444444444,"#bd3786"],[0.5555555555555556,"#d8576b"],[0.6666666666666666,"#ed7953"],[0.7777777777777778,"#fb9f3a"],[0.8888888888888888,"#fdca26"],[1.0,"#f0f921"]]}],"contourcarpet":[{"type":"contourcarpet","colorbar":{"outlinewidth":0,"ticks":""}}],"contour":[{"type":"contour","colorbar":{"outlinewidth":0,"ticks":""},"colorscale":[[0.0,"#0d0887"],[0.1111111111111111,"#46039f"],[0.2222222222222222,"#7201a8"],[0.3333333333333333,"#9c179e"],[0.4444444444444444,"#bd3786"],[0.5555555555555556,"#d8576b"],[0.6666666666666666,"#ed7953"],[0.7777777777777778,"#fb9f3a"],[0.8888888888888888,"#fdca26"],[1.0,"#f0f921"]]}],"surface":[{"type":"surface","colorbar":{"outlinewidth":0,"ticks":""},"colorscale":[[0.0,"#0d0887"],[0.1111111111111111,"#46039f"],[0.2222222222222222,"#7201a8"],[0.3333333333333333,"#9c179e"],[0.4444444444444444,"#bd3786"],[0.5555555555555556,"#d8576b"],[0.6666666666666666,"#ed7953"],[0.7777777777777778,"#fb9f3a"],[0.8888888888888888,"#fdca26"],[1.0,"#f0f921"]]}],"mesh3d":[{"type":"mesh3d","colorbar":{"outlinewidth":0,"ticks":""}}],"scatter":[{"fillpattern":{"fillmode":"overlay","size":10,"solidity":0.2},"type":"scatter"}],"parcoords":[{"type":"parcoords","line":{"colorbar":{"outlinewidth":0,"ticks":""}}}],"scatterpolargl":[{"type":"scatterpolargl","marker":{"colorbar":{"outlinewidth":0,"ticks":""}}}],"bar":[{"error_x":{"color":"#2a3f5f"},"error_y":{"color":"#2a3f5f"},"marker":{"line":{"color":"#E5ECF6","width":0.5},"pattern":{"fillmode":"overlay","size":10,"solidity":0.2}},"type":"bar"}],"scattergeo":[{"type":"scattergeo","marker":{"colorbar":{"outlinewidth":0,"ticks":""}}}],"scatterpolar":[{"type":"scatterpolar","marker":{"colorbar":{"outlinewidth":0,"ticks":""}}}],"histogram":[{"marker":{"pattern":{"fillmode":"overlay","size":10,"solidity":0.2}},"type":"histogram"}],"scattergl":[{"type":"scattergl","marker":{"colorbar":{"outlinewidth":0,"ticks":""}}}],"scatter3d":[{"type":"scatter3d","line":{"colorbar":{"outlinewidth":0,"ticks":""}},"marker":{"colorbar":{"outlinewidth":0,"ticks":""}}}],"scattermapbox":[{"type":"scattermapbox","marker":{"colorbar":{"outlinewidth":0,"ticks":""}}}],"scatterternary":[{"type":"scatterternary","marker":{"colorbar":{"outlinewidth":0,"ticks":""}}}],"scattercarpet":[{"type":"scattercarpet","marker":{"colorbar":{"outlinewidth":0,"ticks":""}}}],"carpet":[{"aaxis":{"endlinecolor":"#2a3f5f","gridcolor":"white","linecolor":"white","minorgridcolor":"white","startlinecolor":"#2a3f5f"},"baxis":{"endlinecolor":"#2a3f5f","gridcolor":"white","linecolor":"white","minorgridcolor":"white","startlinecolor":"#2a3f5f"},"type":"carpet"}],"table":[{"cells":{"fill":{"color":"#EBF0F8"},"line":{"color":"white"}},"header":{"fill":{"color":"#C8D4E3"},"line":{"color":"white"}},"type":"table"}],"barpolar":[{"marker":{"line":{"color":"#E5ECF6","width":0.5},"pattern":{"fillmode":"overlay","size":10,"solidity":0.2}},"type":"barpolar"}],"pie":[{"automargin":true,"type":"pie"}]},"layout":{"autotypenumbers":"strict","colorway":["#636efa","#EF553B","#00cc96","#ab63fa","#FFA15A","#19d3f3","#FF6692","#B6E880","#FF97FF","#FECB52"],"font":{"color":"#2a3f5f"},"hovermode":"closest","hoverlabel":{"align":"left"},"paper_bgcolor":"white","plot_bgcolor":"#E5ECF6","polar":{"bgcolor":"#E5ECF6","angularaxis":{"gridcolor":"white","linecolor":"white","ticks":""},"radialaxis":{"gridcolor":"white","linecolor":"white","ticks":""}},"ternary":{"bgcolor":"#E5ECF6","aaxis":{"gridcolor":"white","linecolor":"white","ticks":""},"baxis":{"gridcolor":"white","linecolor":"white","ticks":""},"caxis":{"gridcolor":"white","linecolor":"white","ticks":""}},"coloraxis":{"colorbar":{"outlinewidth":0,"ticks":""}},"colorscale":{"sequential":[[0.0,"#0d0887"],[0.1111111111111111,"#46039f"],[0.2222222222222222,"#7201a8"],[0.3333333333333333,"#9c179e"],[0.4444444444444444,"#bd3786"],[0.5555555555555556,"#d8576b"],[0.6666666666666666,"#ed7953"],[0.7777777777777778,"#fb9f3a"],[0.8888888888888888,"#fdca26"],[1.0,"#f0f921"]],"sequentialminus":[[0.0,"#0d0887"],[0.1111111111111111,"#46039f"],[0.2222222222222222,"#7201a8"],[0.3333333333333333,"#9c179e"],[0.4444444444444444,"#bd3786"],[0.5555555555555556,"#d8576b"],[0.6666666666666666,"#ed7953"],[0.7777777777777778,"#fb9f3a"],[0.8888888888888888,"#fdca26"],[1.0,"#f0f921"]],"diverging":[[0,"#8e0152"],[0.1,"#c51b7d"],[0.2,"#de77ae"],[0.3,"#f1b6da"],[0.4,"#fde0ef"],[0.5,"#f7f7f7"],[0.6,"#e6f5d0"],[0.7,"#b8e186"],[0.8,"#7fbc41"],[0.9,"#4d9221"],[1,"#276419"]]},"xaxis":{"gridcolor":"white","linecolor":"white","ticks":"","title":{"standoff":15},"zerolinecolor":"white","automargin":true,"zerolinewidth":2},"yaxis":{"gridcolor":"white","linecolor":"white","ticks":"","title":{"standoff":15},"zerolinecolor":"white","automargin":true,"zerolinewidth":2},"scene":{"xaxis":{"backgroundcolor":"#E5ECF6","gridcolor":"white","linecolor":"white","showbackground":true,"ticks":"","zerolinecolor":"white","gridwidth":2},"yaxis":{"backgroundcolor":"#E5ECF6","gridcolor":"white","linecolor":"white","showbackground":true,"ticks":"","zerolinecolor":"white","gridwidth":2},"zaxis":{"backgroundcolor":"#E5ECF6","gridcolor":"white","linecolor":"white","showbackground":true,"ticks":"","zerolinecolor":"white","gridwidth":2}},"shapedefaults":{"line":{"color":"#2a3f5f"}},"annotationdefaults":{"arrowcolor":"#2a3f5f","arrowhead":0,"arrowwidth":1},"geo":{"bgcolor":"white","landcolor":"#E5ECF6","subunitcolor":"white","showland":true,"showlakes":true,"lakecolor":"white"},"title":{"x":0.05},"mapbox":{"style":"light"},"margin":{"b":0,"l":0,"r":0,"t":30}}},"xaxis":{"anchor":"y","domain":[0.0,1.0],"title":{"text":"ProductName"}},"yaxis":{"anchor":"x","domain":[0.0,1.0],"title":{"text":""},"showticklabels":false},"legend":{"tracegroupgap":0},"title":{"text":"Top 10 Ventas Totales por Producto","x":0.5,"xanchor":"center"},"barmode":"relative","height":500,"showlegend":false},                        {"responsive": true}                    ).then(function(){
+                            
+var gd = document.getElementById('9561d342-5eb6-4d46-80a4-a20386ce8bcf');
+var x = new MutationObserver(function (mutations, observer) {{
+        var display = window.getComputedStyle(gd).display;
+        if (!display || display === 'none') {{
+            console.log([gd, 'removed!']);
+            Plotly.purge(gd);
+            observer.disconnect();
+        }}
+}});
+
+// Listen for the removal of the full notebook cells
+var notebookContainer = gd.closest('#notebook-container');
+if (notebookContainer) {{
+    x.observe(notebookContainer, {childList: true});
+}}
+
+// Listen for the clearing of the current output cell
+var outputEl = gd.closest('.output');
+if (outputEl) {{
+    x.observe(outputEl, {childList: true});
+}}
+
+                        })                };                });            </script>        </div>
+</div>
+</div>
 
 
 

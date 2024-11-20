@@ -1,9 +1,102 @@
 ---
 title: "Post With Code"
-author: "Harlow Malloc"
+author: "Esteban Navarro"
 date: "2024-11-19"
 categories: [news, code, analysis]
 image: "image.jpg"
 ---
 
+```{python}
+#importamos librerias
+import sqlite3
+import pandas as pd
+import plotly.express as px
+```
 This is a post with executable code.
+
+
+```{python}
+#conectamos con la base datos
+conn = sqlite3.connect(r"C:\Users\f\Downloads\cetav\progra 3 naib\sem 3\Northwind_small.sqlite")
+conn.close
+```
+
+
+```{python}
+pedidos = pd.read_sql_query("SELECT * FROM 'Order'", conn)
+detalles_pedidos = pd.read_sql_query("SELECT * FROM OrderDetail", conn)
+empleados = pd.read_sql_query("SELECT * FROM 'employee'", conn)
+1
+clientes = pd.read_sql_query("SELECT * FROM 'customer'", conn)
+#para este dataframe no me interesa su numero asi que solo agrego nombre y id
+shipper = pd.read_sql_query("SELECT Id, CompanyName FROM Shipper", conn)
+producto = pd.read_sql_query("SELECT Id, ProductName, categoryId, UnitPrice FROM Product", conn)
+categoria = pd.read_sql_query("SELECT Id, CategoryName FROM category", conn)
+```
+
+
+```{python}
+ #empiezo a unir los dataframes que necesito, metodo usado es df1.merge(df2, left_on='col1', right_on='col2')
+
+tabla_unificada1 = pedidos.merge(detalles_pedidos, left_on='Id', right_on='OrderId', suffixes=('_pedido', 'Detalle'))
+
+tabla_unificada2 = tabla_unificada1.merge(empleados, left_on='EmployeeId', right_on='Id', suffixes=('', 'Empleado'))
+
+tabla_unificada3 = tabla_unificada2.merge(producto, left_on='ProductId', right_on='Id', suffixes=('', 'Producto'))
+
+tabla_unificada4 = tabla_unificada3.merge(categoria, left_on='CategoryId', right_on='Id', suffixes=('', 'Categoria'))
+
+tabla_unificada5 = tabla_unificada4.merge(clientes, left_on='CustomerId', right_on='Id', suffixes=('', 'Cliente'))
+
+Northwind_unificada = tabla_unificada5.merge(shipper, left_on='ShipVia', right_on='Id', suffixes=('', 'Shipper'))
+
+
+
+Northwind_unificada.head(5)
+```
+
+```{python}
+ #Creo dataframes con las columnas especificas que necesito para el posterior graficado de los datos
+tabla_ventas = Northwind_unificada[['Id_pedido', 'UnitPrice', 'ProductName', 'CategoryName', 'Quantity']].copy()
+tabla_ventas.loc[:, 'Total'] = tabla_ventas['UnitPrice'] * tabla_ventas['Quantity']
+
+# Mostrar las primeras filas para verificar
+tabla_ventas.head(5)
+
+
+```
+
+```{python}
+ # importo librerias
+import plotly.express as px
+import plotly.io as pio
+
+
+ #saco las columnas que necesito y las copio para evitar danar el dataframe que hice
+tabla_ventas[['ProductName', 'Total']].copy()
+
+#agrupo por 'ProductName' y sumar el total de ventas, seleccionando el top 10
+top_10_productos = tabla_ventas.groupby('ProductName')['Total'].sum().nlargest(10).reset_index()
+
+# creo el grafico basico ocon las dos columnas
+fig = px.bar(top_10_productos, x='ProductName', y='Total',
+             hover_data=['Total'], labels={'Total': ''}, height=500,
+             title="Top 10 Ventas Totales por Producto")
+
+# Aagrego las etiquetas de datos
+fig.update_traces(texttemplate='%{y:.2f}', textposition='outside')
+
+# elijo azul para las 3 primeras columnas y gris para el resto para mostrar
+colors = ['#ADD8E6' if i < 3 else '#D3D3D3' for i in range(len(top_10_productos))]
+fig.update_traces(marker=dict(color=colors))
+
+# elimino la barra de datos del eje y
+fig.update_layout(yaxis=dict(showticklabels=False))
+
+# centro el titulo, tambien quito la leyenda de los productos
+fig.update_layout(title={'text': "Top 10 Ventas Totales por Producto", 'x':0.5, 'xanchor': 'center'},
+                  showlegend=False)
+
+# Mostrar el gráfico
+fig.show()
+```

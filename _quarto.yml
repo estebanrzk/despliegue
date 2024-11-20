@@ -15,5 +15,6 @@ format:
     theme: cosmo
     css: styles.css
 
+output-dir: docs
 
 
