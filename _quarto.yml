@@ -1,5 +1,6 @@
 project:
   type: website
+output-dir: docs
 
 website:
   title: "repo proyecto final"
@@ -15,6 +16,6 @@ format:
     theme: cosmo
     css: styles.css
 
-output-dir: docs
+
 
 
